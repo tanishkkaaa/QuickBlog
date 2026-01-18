@@ -11,7 +11,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://quickblog.vercel.app"
+    "https://quick-blog-lemon.vercel.app/"
   ],
   credentials: true
 }));

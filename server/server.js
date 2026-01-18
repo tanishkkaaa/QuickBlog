@@ -1,28 +1,44 @@
-import express from 'express';
-import 'dotenv/config';
-import cors from 'cors';
-import connectDB from './config/db.js';
-import adminRouter from './routes/adminRoutes.js';
-import blogRouter from './routes/blogRoutes.js';
+import express from "express";
+import "dotenv/config";
+import cors from "cors";
+import connectDB from "./config/db.js";
+import adminRouter from "./routes/adminRoutes.js";
+import blogRouter from "./routes/blogRoutes.js";
 
 const app = express();
 
-await connectDB();
-
-//Middleware
-app.use(cors());
+// Middleware
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://quickblog.vercel.app"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
-//routes
-app.get('/', (req, res)=>res.send("Api is working.."));
-app.use('/api/admin', adminRouter)
-app.use('/api/blog', blogRouter)
+// Routes
+app.get("/", (req, res) => {
+  res.send("API is working...");
+});
 
+app.use("/api/admin", adminRouter);
+app.use("/api/blog", blogRouter);
 
-const PORT=process.env.PORT||3000;
+// Start server AFTER DB connection
+const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, ()=>{
-    console.log('Server is running on port ' + PORT)
-    })
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Database connection failed:", error);
+  }
+};
 
- export default app;
+startServer();
+
+export default app;

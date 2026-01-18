@@ -9,9 +9,8 @@ const app = express();
 
 // ✅ Middleware
 app.use(cors({
-  origin: "https://quick-blog-one-pink.vercel.app", 
+  origin: true,
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
 }));
 
 app.use(express.json());
